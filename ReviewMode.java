@@ -3,16 +3,19 @@ import java.util.Scanner;
 public class ReviewMode {
     private FlashcardSet set;
     private Scanner scanner;
+    private String difficulty; // easy, medium, hard
 
-    public ReviewMode(FlashcardSet set, Scanner scanner) {
+    public ReviewMode(FlashcardSet set, Scanner scanner, String difficulty) {
         this.set = set;
         this.scanner = scanner;
+        this.difficulty = difficulty;
     }
 
-    public void startReview() {
+    // return earned turns based on diffculty & answers
+    public int startReview() {
         if (set.getSize() == 0) {
             System.out.println("This set has no cards to review.");
-            return;
+            return 0;
         }
 
         System.out.println("Choose review mode:");
@@ -20,20 +23,27 @@ public class ReviewMode {
         System.out.println("2 - Self-check (you check your answer yourself)");
         System.out.print("Enter choice: ");
 
-        String choice = scanner.nextLine().trim();
+        String choice = scanner.nextLine();
+
+        int turnsEarned = 0;
 
         if (choice.equals("1")) {
-            autoCheckMode();
+            turnsEarned = autoCheckMode();
         } else if (choice.equals("2")) {
-            selfCheckMode();
+            turnsEarned = selfCheckMode();
         } else {
             System.out.println("Invalid choice, returning to menu.");
         }
+
+        System.out.println("You earned " + turnsEarned + " turn(s) for the game mode.");
+        return turnsEarned;
     }
 
-    private void autoCheckMode() {
+    private int autoCheckMode() {
         int correct = 0;
         int wrong = 0;
+        int streak = 0;
+        int turns = 0;
 
         System.out.println("Auto-check mode. Type the definition for each term.");
 
@@ -43,23 +53,29 @@ public class ReviewMode {
 
             System.out.println("\nTerm: " + term);
             System.out.print("Your answer: ");
-            String answer = scanner.nextLine().trim();
+            String answer = scanner.nextLine();
 
-            if (answer.equalsIgnoreCase(definition.trim())) {
+            if (answer.equalsIgnoreCase(definition)) {
                 System.out.println("Correct!");
                 correct++;
+                streak++;
+                turns += calculateTurnsForStreak(streak);
             } else {
                 System.out.println("Wrong. Correct answer: " + definition);
                 wrong++;
+                streak = 0; // reset streak on wrong answer
             }
         }
 
         printSummary(correct, wrong);
+        return turns;
     }
 
-    private void selfCheckMode() {
+    private int selfCheckMode() {
         int correct = 0;
         int wrong = 0;
+        int streak = 0;
+        int turns = 0;
 
         System.out.println("Self-check mode. Think of the definition, then check yourself.");
 
@@ -75,12 +91,15 @@ public class ReviewMode {
 
             while (true) {
                 System.out.print("Did you get it right? (y/n): ");
-                String input = scanner.nextLine().trim().toLowerCase();
+                String input = scanner.nextLine().toLowerCase();
                 if (input.equals("y")) {
                     correct++;
+                    streak++;
+                    turns += calculateTurnsForStreak(streak);
                     break;
                 } else if (input.equals("n")) {
                     wrong++;
+                    streak = 0;
                     break;
                 } else {
                     System.out.println("Please answer 'y' or 'n'.");
@@ -89,6 +108,22 @@ public class ReviewMode {
         }
 
         printSummary(correct, wrong);
+        return turns;
+    }
+
+    private int calculateTurnsForStreak(int streak) {
+        // easy: every correct = 1 turn
+        // medium: every 2 correct in a row = 1 turn
+        // hard: every 5 correct in a row = 1 turn
+
+        if (difficulty.equalsIgnoreCase("easy")) {
+            return 1;
+        } else if (difficulty.equalsIgnoreCase("medium")) {
+            if (streak % 2 == 0) return 1;
+        } else if (difficulty.equalsIgnoreCase("hard")) {
+            if (streak % 5 == 0) return 1;
+        }
+        return 0;
     }
 
     private void printSummary(int correct, int wrong) {
