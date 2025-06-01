@@ -2,9 +2,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class GameMode {
-    private Scanner scanner;
-    private int turns;
-    private Random random;
+    private final Scanner scanner;
+    private final int turns;
+    private final Random random;
 
     public GameMode(Scanner scanner, int turns) {
         this.scanner = scanner;
@@ -135,9 +135,7 @@ public class GameMode {
         // Scissors beats Paper (3 beats 2)
         // Paper beats Rock (2 beats 1)
 
-        if ((player == 1 && comp == 3) ||
-                (player == 3 && comp == 2) ||
-                (player == 2 && comp == 1)) {
+        if ((player == 1 && comp == 3) || (player == 3 && comp == 2) || (player == 2 && comp == 1)) {
             return 1;
         } else {
             return -1;

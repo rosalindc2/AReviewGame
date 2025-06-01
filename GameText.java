@@ -1,8 +1,8 @@
 import java.util.Scanner;
 
 public class GameText {
-    private Editor editor;
-    private Scanner scanner;
+    private final Editor editor;
+    private final Scanner scanner;
     private int gameTurnsEarned; // stores turns earned across reviews
 
     public GameText() {
