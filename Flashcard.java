@@ -1,4 +1,5 @@
 public class Flashcard {
+    // basics of a flashcard
     public String term;
     public String definition;
 

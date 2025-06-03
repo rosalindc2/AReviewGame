@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+// simple, interacts w/ cards & self-explanatory names
 public class FlashcardSet {
     public String name;
     public ArrayList<Flashcard> cards;

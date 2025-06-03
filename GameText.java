@@ -11,13 +11,10 @@ public class GameText {
         gameTurnsEarned = 0;
     }
 
-    public static void main(String[] args) {
-        new GameText().run();
-    }
-
     public void run() {
         while (true) {
-            System.out.println("\n--- Quizlet Text App ---");
+            System.out.println("\n--- ` A Review Game  ---" +
+                    "\nOptions:");
             System.out.println("1. list sets");
             System.out.println("2. add set");
             System.out.println("3. remove set");
@@ -106,7 +103,7 @@ public class GameText {
                 set.listCards();
 
             } else if (command.equalsIgnoreCase("add")) {
-                System.out.println("Add cards: enter multiple cards separated by double spaces:");
+                System.out.println("Add cards: enter cards separated by double spaces:");
                 System.out.println("Format: term;definition  term;definition  ...");
                 System.out.println("Type '/e' alone to stop adding.");
 
